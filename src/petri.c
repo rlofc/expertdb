@@ -39,10 +39,10 @@ static int get_index_part(int i,uint8_t buf[MURMURS/8]) {
                                  0xf0,0x0f,0xf0,0x0f,
                                  0xf0,0x0f,0xf0,0x0f};
    const int shifters[16] = { 4,0,4,0,4,0,4,0,4,0,4,0,4,0,4,0 };
-   uint8_t tmp = buf[i/2];
-   tmp = tmp & zeroers[i];
-   tmp = tmp >> shifters[i];
-   return tmp;
+   uint8_t fragment = buf[i/2];
+   fragment = fragment & zeroers[i];
+   fragment = fragment >> shifters[i];
+   return fragment;
 }
 
 
