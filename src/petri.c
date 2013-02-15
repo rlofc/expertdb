@@ -9,6 +9,11 @@
 
 #include "murmur.h"
 
+#define ENSURE0(cmd_should_return_0) \
+   if (cmd_should_return_0!=0) goto error;
+#define ENSURE(cmd_should_not_return_0) \
+   if (cmd_should_not_return_0==0) goto error;
+
 #define N_VALID_KEY_CHARS 16
 
 #define MURMUR MurmurHash3_x64_128
