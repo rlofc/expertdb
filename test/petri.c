@@ -31,8 +31,8 @@ describe (petri_module) {
    }
 
    it (should index a value in a petri file) {
-      petri_create("./index.petri");
-      pptr = petri_open("./index.petri");
+      petri_create("/tmp/index.petri");
+      pptr = petri_open("/tmp/index.petri");
       petri_set(pptr, "key1",1000);
       petri_set(pptr, "key2",2000);
       petri_set(pptr, "key12",3000);
