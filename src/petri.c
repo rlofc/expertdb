@@ -16,7 +16,7 @@
 
 #define N_VALID_KEY_CHARS 16
 
-#define MURMUR MurmurHash3_x64_128
+#define MURMUR MurmurHash3_x86_32
 #define MURMURS 32
 
 struct petri

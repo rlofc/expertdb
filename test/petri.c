@@ -42,7 +42,14 @@ describe (petri_module) {
    }
 
    it (should replace an indexed value in a petri file) {
-
+      petri_create("/tmp/index.petri");
+      pptr = petri_open("/tmp/index.petri");
+      petri_set(pptr, "key1",1000);
+      petri_set(pptr, "key2",2000);
+      petri_set(pptr, "key1",3000);
+      long data = 0;
+      assert ( petri_get(pptr, "key1",&data) == 0 && data == 3000 );
+      petri_close(pptr);
    }
 
    it (should deal with hash collisions gracefully) {
