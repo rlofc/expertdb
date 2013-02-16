@@ -127,11 +127,13 @@ int petri_set(struct petri * t, const char * key, long data) {
    ENSURE0(fseek(t->f,0,SEEK_SET)); /* start at the begining of the file     */
    ENSURE(fread(&node,sizeof(struct petri_node_t),1,t->f)); /* read root     */
    MURMUR(key,strlen(key),0xf1c744,buf); /* hash the key                     */
-   int i = 0, len = MURMURS/4; /* tree depth of 4 bits frags                 */
-   long fp = 0;
-   /* begin our _len_ levels traversal down the tree                         */
-   for(; i < len ; i++ ) {
+
+   long node_pos_marker = 0; 
+
+   /* begin our len levels traversal down the tree using 4 bits LUT segs     */
+   for(int i = 0, len = MURMURS/4; i < len ; i++ ) {
       int index = get_index_part(i,buf); /* we get the next 4 bits key part  */
+
       if (node.next_offset[index] == 0) { /* create nodes if branch is null  */
          long oldpos = ftell(t->f)-sizeof(struct petri_node_t);
          ENSURE0(fseek(t->f,0,SEEK_END)); /* where will we put the new node  */
@@ -143,16 +145,19 @@ int petri_set(struct petri * t, const char * key, long data) {
          node.next_offset[index] = pos; /* to point to the fresh node        */
          ENSURE(fwrite(&node,sizeof(struct petri_node_t),1,t->f)); /* save   */
       }
+
       /* follow through to the next node (which can be a fresh new one)      */
-      fp = node.next_offset[index];
-      ENSURE0(fseek(t->f,fp,SEEK_SET));
+      node_pos_marker = node.next_offset[index];
+      ENSURE0(fseek(t->f,node_pos_marker,SEEK_SET));
       ENSURE(fread(&node,sizeof(struct petri_node_t),1,t->f));
    }
+
    /* finally, we are at the leaf node of the full key.                      */
-   ENSURE0(fseek(t->f,fp,SEEK_SET)); /* repos to begining of node record     */
+   ENSURE0(fseek(t->f,node_pos_marker,SEEK_SET)); /* reposition to node      */
    node.data_offset = (long)data; /* this is why we started all this anyway  */
    ENSURE(fwrite(&node,sizeof(struct petri_node_t),1,t->f)); /* upd the leaf */
    return 0; /* all is well                                                  */
+
 error:
    /* if an error occurs in one of the ENSUREs then the index file should 
     * remain fine and not get corrupted, but without the new index!
@@ -171,6 +176,7 @@ int petri_get(struct petri *t, const char * key, long * data) {
    ENSURE(fread(&node,sizeof(struct petri_node_t),1,t->f));
    MURMUR(key,strlen(key),0xf1c744,buf);
    int i = 0, len = MURMURS/4;
+
    /* begin our _len_ levels traversal down the tree                         */
    for(; i < len ; i++ ) {
       int index = get_index_part(i,buf);
@@ -181,7 +187,9 @@ int petri_get(struct petri *t, const char * key, long * data) {
          ENSURE(fread(&node,sizeof(struct petri_node_t),1,t->f));
       }
    } 
+
    return (i==len) ? *data = node.data_offset,0 : 1;
+
 error:
    return -1;
 }
