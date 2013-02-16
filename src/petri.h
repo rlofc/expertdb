@@ -14,6 +14,16 @@ extern struct petri petri;
  */
 int petri_create(const char *filename);
 
+/* VERSION
+ * ---------------------------------------------------------------------------
+ * Query the version of a petri file.
+ * returns:
+ *   -1 - unable to open file
+ *    0 - file is invalid
+ *    * - version number
+ */
+int petri_version(const char *filename);
+
 /* OPEN
  * ---------------------------------------------------------------------------
  * Open an existing petri file.
@@ -35,8 +45,23 @@ struct petri * petri_open(const char *filename);
  */
 int petri_close(struct petri * t);
 
-void petri_set(struct petri *t, const char * key, long data);
-long petri_get(struct petri *t, const char * key);
+/* SET
+ * ---------------------------------------------------------------------------
+ *  Set a position value for a key.
+ *  Key should be a string. Murmur hash (32) is used
+ *  to hash the key.
+ *  returns:
+ *    0 - success
+ */
+int petri_set(struct petri *t, const char * key, long data);
+
+/* GET
+ * ---------------------------------------------------------------------------
+ * Get a stored long for the specified key.
+ * return:
+ *    0 - success
+ */
+int petri_get(struct petri *t, const char * key, long *data);
 
 #endif /* end of include guard: PETRI_H_6KWEJDKY */
 

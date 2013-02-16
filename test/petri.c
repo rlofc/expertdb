@@ -1,10 +1,14 @@
 #include "c89spec/c89spec.h"
 #include "../src/petri.h"
-
+#include <stdio.h>
 describe (petri_module) {
    struct petri * pptr = 0;
    it (should create a petri file) {
       assert(petri_create("/tmp/index.petri")==0);
+   }
+
+   it ( should properly bootstrap a petri file ) {
+      assert(petri_version("/tmp/index.petri")>0);
    }
 
    it (should open a precreated petri file) {
@@ -27,11 +31,25 @@ describe (petri_module) {
    }
 
    it (should index a value in a petri file) {
-
+      petri_create("/tmp/index.petri");
+      pptr = petri_open("/tmp/index.petri");
+      petri_set(pptr, "key1",1000);
+      petri_set(pptr, "key2",2000);
+      petri_set(pptr, "key12",3000);
+      long data = 0;
+      assert ( petri_get(pptr, "key12",&data) == 0 && data == 3000 );
+      petri_close(pptr);
    }
 
    it (should replace an indexed value in a petri file) {
-
+      petri_create("/tmp/index.petri");
+      pptr = petri_open("/tmp/index.petri");
+      petri_set(pptr, "key1",1000);
+      petri_set(pptr, "key2",2000);
+      petri_set(pptr, "key1",3000);
+      long data = 0;
+      assert ( petri_get(pptr, "key1",&data) == 0 && data == 3000 );
+      petri_close(pptr);
    }
 
    it (should deal with hash collisions gracefully) {
