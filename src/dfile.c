@@ -73,3 +73,25 @@ error_invalid_input:
 error_close_failed:
    return 2;
 }
+
+/* STORE
+ * ------------------------------------------------------------------------- */
+long dfile_store(struct dfile * file, void * buf, size_t size) {
+   ENSURE0(fseek(file->f,0,SEEK_END));
+   long pos = ftell(file->f);
+   ENSURE(fwrite(buf,size,1,file->f));
+   return pos;
+error:
+   return -1;
+}
+
+/* RESTORE
+ * ------------------------------------------------------------------------- */
+int dfile_restore(struct dfile * file,long pos, void * buf, size_t size) {
+   ENSURE0(fseek(file->f,pos,SEEK_SET));
+   int nread = fread(buf,size,1,file->f);
+   ENSURE(nread);
+   return nread;
+error:
+   return 0;
+}

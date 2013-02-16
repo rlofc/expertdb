@@ -1,6 +1,8 @@
 #ifndef DFILE_H_48FDK2D1
 #define DFILE_H_48FDK2D1
 
+#include <stdio.h>
+
 extern struct dfile dfile;
 
 /* CREATE
@@ -44,5 +46,26 @@ struct dfile * dfile_open(const char *filename);
  *    2 - was unable to close file
  */
 int dfile_close(struct dfile * t);
+
+/* STORE
+ * ---------------------------------------------------------------------------
+ * Store a buffer in the dfile. Buffer is appended to
+ * the file and the position of the new record is
+ * returned.
+ * returns:
+ *    -1 - an error occured
+ *     * - valid position in the file
+ */
+long dfile_store(struct dfile * file, void * buf, size_t size);
+
+/* RESTORE
+ * ---------------------------------------------------------------------------
+ * Retrieve a buffer from the dfile, using the size and
+ * position.
+ * returns:
+ *    n - number of records read - should be 1
+ *   -1 - an error occured
+ */
+int dfile_restore(struct dfile * file,long pos, void * buf, size_t size);
 
 #endif /* end of include guard: DFILE_H_48FDK2D1 */
