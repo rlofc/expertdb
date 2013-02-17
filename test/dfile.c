@@ -42,7 +42,7 @@ describe (dfile_module) {
       char buf[21];
       int nread = dfile_restore(pptr,0,buf,20);
       buf[20] = 0;
-      assert(strcmp(buf,"just a bunch of data")==0 & nread==1);
+      assert(strcmp(buf,"just a bunch of data")==0 && nread==1);
       dfile_close(pptr);
    }
 
