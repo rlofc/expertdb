@@ -1,4 +1,4 @@
-expert.db [![Build Status](https://travis-ci.org/L3V3L9/expertdb.png)]
+expert.db [![Build Status](https://travis-ci.org/L3V3L9/expertdb.png?branch=master)](https://travis-ci.org/L3V3L9/expertdb)
 =========
 The high-performance graph database.
 
