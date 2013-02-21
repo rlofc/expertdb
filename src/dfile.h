@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-extern struct dfile dfile;
+struct dfile;
 
 /* CREATE
  * ---------------------------------------------------------------------------

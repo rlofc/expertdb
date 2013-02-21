@@ -1,7 +1,7 @@
 #ifndef PETRI_H_6KWEJDKY
 #define PETRI_H_6KWEJDKY
 
-extern struct petri petri;
+struct petri;
 
 /* CREATE
  * ---------------------------------------------------------------------------
