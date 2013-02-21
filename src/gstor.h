@@ -3,7 +3,8 @@
 
 #include <stdio.h>
 
-extern struct gstor gstor;
+struct gstor;
+
 #define GSTOR_OKAY 0
 #define GSTOR_ERROR -1
 

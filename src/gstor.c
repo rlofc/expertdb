@@ -3,8 +3,10 @@
 #include "string.h"
 #include "petri.h"
 #include "dfile.h"
+
 #include "gstor.h"
 
+struct gstor gstor;
 struct gstor {
    struct petri * index;
    struct dfile * data;
